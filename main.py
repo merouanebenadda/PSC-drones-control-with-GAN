@@ -492,7 +492,7 @@ def compute_loss_phi(N_omega, N_theta, batch_size, T, lambda_reg):
 x_target = torch.tensor([0,1,0], device="cpu")
 def g(x):
     x = x.to(device)
-    return torch.norm(x.mean(dim=0) - x_target.to(device))
+    return torch.norm(x.mean(dim=0) - x_target.to(device)) + f_formation_old(x)
 
 def compute_loss_G(N_omega, N_theta, batch_size, T, verbose=False):
     """
@@ -589,6 +589,8 @@ def test_wave_trajectories(n, N_theta, total_time=TOTAL_TIME, num_steps=100):
         # Detach before converting to NumPy
         trajectories.append(traj.cpu().detach().numpy())
 
+    with open(PATH / "trajectories" / ("trajectories_" + MODEL_NAME + ".txt"), "w") as file:
+        file.write(str(trajectories))
 
     # Plot the trajectories
     fig = plt.figure(figsize=(8, 6))
@@ -605,7 +607,7 @@ def test_wave_trajectories(n, N_theta, total_time=TOTAL_TIME, num_steps=100):
         y_s = cy + OBSTACLE_SIZE * np.sin(u) * np.sin(v)
         z_s = cz + OBSTACLE_SIZE * np.cos(v)
         ax.plot_surface(x_s, y_s, z_s, color='k', alpha=0.6, linewidth=0)
-    ax.set_title("Trajectories of " + str(n) + f" Drones Over {total_time: .1f} Seconds")
+    ax.set_title("Trajectories of " + str(n) + f" Drones Over {total_time: .1f} Seconds\n"+MODEL_NAME)
     ax.plot(x_target[0], x_target[1], x_target[2], 'o', c="yellow")
     ax.set_xlabel("X")
     ax.set_ylabel("Y")

@@ -4,7 +4,14 @@ models/*
 figures/*
 !figures/.gitkeep
 
+<<<<<<< HEAD
 saved_models/
+=======
+trajectories/*
+!trajectories/.gitkeep
+
+old/
+>>>>>>> 02c6b82e498eea4f782fa30629b4b6782b8cff44
 
 venv/
 
